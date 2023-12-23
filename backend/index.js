@@ -1,48 +1,33 @@
 import express from "express";
 import { PORT, mongo_URI } from "./config.js";
 import mongoose from "mongoose";
+import cors from "cors";
+
 import { Book } from "./Models/book.models.js";
+import bookRoute from "./routes/book.route.js";
 
 const app = express();
+//middleware for parsing request body
 app.use(express.json());
+
+//Handling cors policy
+//op1:Allow all origin with default of cors(*)
+// app.use(cors())
+
+//op2:Allow custom origin
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "DELETE", "UPDATE"],
+    allowedHeaders: ["content-type"],
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("hello world");
 });
 
-//route for save a new book
-app.post("/books", async (req, res) => {
-  try {
-    if (!req.body.title || !req.body.author || !req.body.publishYear) {
-      return res.status(400).send({ message: "All fields required" });
-    }
-    const newBook = {
-      title: req.body.title,
-      author: req.body.author,
-      publishYear: req.body.publishYear,
-    };
-    const book = await Book.create(newBook);
-    return res.status(200).send(book);
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).send({ message: error.message });
-  }
-});
-
-//route to get all books from db
-
-app.get("/books", async (req, res) => {
-  try {
-    const books = await Book.find({});
-    return res.status(200).json({
-      count: books.length,
-      data: books,
-    });
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).send({ message: error.message });
-  }
-});
+app.use("/books", bookRoute);
 
 //mongoose connection
 mongoose
