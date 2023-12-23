@@ -1,0 +1,6 @@
+username->mrahulmaity623
+password -> x1lhlmPNQdy05SWa
+x1lhlmPNQdy05SWa
+
+
+connection string -> mongodb+srv://mrahulmaity623:<password>@cluster0.al4vnd8.mongodb.net/
