@@ -3,8 +3,7 @@ import { PORT, mongo_URI } from "./config.js";
 import mongoose from "mongoose";
 import cors from "cors";
 
-import { Book } from "./Models/book.models.js";
-import bookRoute from "./routes/book.route.js";
+import booksRoute from "./routes/booksRoute.js";
 
 const app = express();
 //middleware for parsing request body
@@ -27,7 +26,7 @@ app.get("/", (req, res) => {
   res.send("hello world");
 });
 
-app.use("/books", bookRoute);
+app.use('/books', booksRoute);
 
 //mongoose connection
 mongoose
